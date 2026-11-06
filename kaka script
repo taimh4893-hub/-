@@ -1,4 +1,4 @@
--- سكريبت سابثون لـ  kaka dev (Loadstring Ready)
+-- سكريبت سابثون لـ Kaka - خلفيات متحركة مضمونة
 local Players = game:GetService("Players")
 local player = Players.LocalPlayer
 local playerGui = player:WaitForChild("PlayerGui")
@@ -12,7 +12,7 @@ screenGui.Name = "SubathonMasterGUI"
 screenGui.Parent = playerGui
 screenGui.ResetOnSpawn = false
 
--- ==================== نافذة تسجيل الدخول ====================
+-- ==================== 1. نافذة تسجيل الدخول ====================
 local loginFrame = Instance.new("Frame")
 loginFrame.Size = UDim2.new(0, 300, 0, 220)
 loginFrame.Position = UDim2.new(0.5, -150, 0.35, 0)
@@ -62,16 +62,16 @@ local loginFooter = Instance.new("TextLabel")
 loginFooter.Size = UDim2.new(1, 0, 0, 20)
 loginFooter.Position = UDim2.new(0, 0, 0, 185)
 loginFooter.BackgroundTransparency = 1
-loginFooter.Text = "سكريبت خاص بـ lion king"
+loginFooter.Text = "صاحب السكريبت: Kaka"
 loginFooter.TextColor3 = Color3.fromRGB(255, 170, 0)
 loginFooter.TextSize = 11
 loginFooter.Font = Enum.Font.GothamBold
 loginFooter.Parent = loginFrame
 
 
--- ==================== الواجهة الرئيسية للسابثون ====================
+-- ==================== 2. الواجهة الرئيسية للسابثون ====================
 local mainFrame = Instance.new("Frame")
-mainFrame.Size = UDim2.new(0, 320, 0, 420)
+mainFrame.Size = UDim2.new(0, 320, 0, 435)
 mainFrame.Position = UDim2.new(0.5, -160, 0.18, 0)
 mainFrame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 mainFrame.BorderSizePixel = 0
@@ -111,7 +111,7 @@ settingsBtn.Parent = mainFrame
 Instance.new("UICorner", settingsBtn).CornerRadius = UDim.new(0, 6)
 
 
--- ==================== نافذة الإعدادات (على اليمين) ====================
+-- ==================== 3. نافذة الإعدادات المنفصلة (على اليمين) ====================
 local settingsPanel = Instance.new("Frame")
 settingsPanel.Size = UDim2.new(0, 220, 0, 240)
 settingsPanel.Position = UDim2.new(1, 10, 0, 0)
@@ -156,4 +156,4 @@ shrinkBtn.Position = UDim2.new(0.53, 0, 0.45, 0)
 shrinkBtn.BackgroundColor3 = Color3.fromRGB(220, 60, 60)
 shrinkBtn.Text = "تصغير ➖"
 shrinkBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-shrinkBtn.TextSize, shrinkBtn.Font = 1
+shrinkBtn.TextSize, shrin
