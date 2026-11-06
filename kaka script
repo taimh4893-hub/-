@@ -1,264 +1,159 @@
-
---[[
-  KAKA SUBATHON V2 🌈
-  Creator: Kaka
-  Rainbow Timer
-]]
-
+-- سكريبت سابثون لـ  kaka dev (Loadstring Ready)
 local Players = game:GetService("Players")
-local UIS = game:GetService("UserInputService")
-local RunService = game:GetService("RunService")
-
 local player = Players.LocalPlayer
-local guiParent = game:GetService("CoreGui")
+local playerGui = player:WaitForChild("PlayerGui")
 
-local old = guiParent:FindFirstChild("KAKA_SUBATHON")
-if old then old:Destroy() end
-
-local gui = Instance.new("ScreenGui")
-gui.Name = "KAKA_SUBATHON"
-gui.ResetOnSpawn = false
-gui.Parent = guiParent
-
-local frame = Instance.new("Frame")
-frame.Size = UDim2.fromOffset(390,440)
-frame.Position = UDim2.new(.5,-195,.5,-220)
-frame.BackgroundColor3 = Color3.fromRGB(18,18,30)
-frame.Parent = gui
-Instance.new("UICorner",frame).CornerRadius = UDim.new(0,20)
-
-local stroke = Instance.new("UIStroke",frame)
-stroke.Thickness = 4
-
-local function makeButton(parent,text,x,y,w,h)
-    local b = Instance.new("TextButton")
-    b.Size = UDim2.fromOffset(w,h)
-    b.Position = UDim2.fromOffset(x,y)
-    b.BackgroundColor3 = Color3.fromRGB(43,43,65)
-    b.TextColor3 = Color3.new(1,1,1)
-    b.Text = text
-    b.TextScaled = true
-    b.Font = Enum.Font.GothamBold
-    b.Parent = parent
-    Instance.new("UICorner",b).CornerRadius = UDim.new(0,10)
-    return b
+if playerGui:FindFirstChild("SubathonMasterGUI") then
+    playerGui.SubathonMasterGUI:Destroy()
 end
 
-local title = Instance.new("TextLabel")
-title.Size = UDim2.new(1,-45,0,55)
-title.BackgroundTransparency = 1
-title.Text = "🌈 KAKA SUBATHON"
-title.TextColor3 = Color3.new(1,1,1)
-title.TextScaled = true
-title.Font = Enum.Font.GothamBold
-title.Parent = frame
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name = "SubathonMasterGUI"
+screenGui.Parent = playerGui
+screenGui.ResetOnSpawn = false
 
-local close = makeButton(frame,"X",345,8,35,35)
-close.BackgroundColor3 = Color3.fromRGB(180,40,60)
+-- ==================== نافذة تسجيل الدخول ====================
+local loginFrame = Instance.new("Frame")
+loginFrame.Size = UDim2.new(0, 300, 0, 220)
+loginFrame.Position = UDim2.new(0.5, -150, 0.35, 0)
+loginFrame.BackgroundColor3 = Color3.fromRGB(15, 17, 26)
+loginFrame.BorderSizePixel = 0
+loginFrame.Parent = screenGui
 
-local timer = Instance.new("TextLabel")
-timer.Size = UDim2.new(1,-30,0,80)
-timer.Position = UDim2.fromOffset(15,65)
-timer.BackgroundColor3 = Color3.fromRGB(35,35,55)
-timer.TextColor3 = Color3.new(1,1,1)
-timer.TextScaled = true
-timer.Font = Enum.Font.GothamBold
-timer.Parent = frame
-Instance.new("UICorner",timer).CornerRadius = UDim.new(0,12)
+Instance.new("UICorner", loginFrame).CornerRadius = UDim.new(0, 14)
+local loginStroke = Instance.new("UIStroke", loginFrame)
+loginStroke.Color = Color3.fromRGB(0, 255, 204)
+loginStroke.Thickness = 2
 
-local input = Instance.new("TextBox")
-input.Size = UDim2.new(1,-30,0,42)
-input.Position = UDim2.fromOffset(15,155)
-input.BackgroundColor3 = Color3.fromRGB(40,40,60)
-input.TextColor3 = Color3.new(1,1,1)
-input.PlaceholderText = "Enter minutes..."
-input.Text = "60"
-input.TextScaled = true
-input.ClearTextOnFocus = false
-input.Parent = frame
-Instance.new("UICorner",input).CornerRadius = UDim.new(0,10)
+local loginTitle = Instance.new("TextLabel")
+loginTitle.Size = UDim2.new(1, 0, 0, 40)
+loginTitle.Position = UDim2.new(0, 0, 0, 15)
+loginTitle.BackgroundTransparency = 1
+loginTitle.Text = "🚀 مرحباً بك في السابثون"
+loginTitle.TextColor3 = Color3.fromRGB(0, 255, 204)
+loginTitle.TextSize = 16
+loginTitle.Font = Enum.Font.GothamBold
+loginTitle.Parent = loginFrame
 
-local seconds = 0
-local running = false
-local alive = true
+local nameInput = Instance.new("TextBox")
+nameInput.Size = UDim2.new(0.85, 0, 0, 40)
+nameInput.Position = UDim2.new(0.075, 0, 0, 65)
+nameInput.BackgroundColor3 = Color3.fromRGB(22, 25, 38)
+nameInput.PlaceholderText = "اكتب اسم حسابك هنا..."
+nameInput.Text = ""
+nameInput.TextColor3 = Color3.fromRGB(255, 255, 255)
+nameInput.TextSize = 14
+nameInput.Font = Enum.Font.Gotham
+nameInput.Parent = loginFrame
+Instance.new("UICorner", nameInput).CornerRadius = UDim.new(0, 8)
 
-local function update()
-    local h = math.floor(seconds/3600)
-    local m = math.floor(seconds%3600/60)
-    local s = math.floor(seconds%60)
-    timer.Text = string.format("%02d:%02d:%02d",h,m,s)
-end
+local startBtn = Instance.new("TextButton")
+startBtn.Size = UDim2.new(0.85, 0, 0, 40)
+startBtn.Position = UDim2.new(0.075, 0, 0, 120)
+startBtn.BackgroundColor3 = Color3.fromRGB(0, 255, 204)
+startBtn.Text = "ابدء ⚡"
+startBtn.TextColor3 = Color3.fromRGB(15, 17, 26)
+startBtn.TextSize = 16
+startBtn.Font = Enum.Font.GothamBold
+startBtn.Parent = loginFrame
+Instance.new("UICorner", startBtn).CornerRadius = UDim.new(0, 8)
 
-local start = makeButton(frame,"▶ START SUBATHON",15,210,175,45)
-local pause = makeButton(frame,"⏸ PAUSE",200,210,175,45)
-local reset = makeButton(frame,"🔄 RESET",15,265,360,40)
-local menuButton = makeButton(frame,"➕ OPEN ADD TIME MENU",15,315,360,42)
+local loginFooter = Instance.new("TextLabel")
+loginFooter.Size = UDim2.new(1, 0, 0, 20)
+loginFooter.Position = UDim2.new(0, 0, 0, 185)
+loginFooter.BackgroundTransparency = 1
+loginFooter.Text = "سكريبت خاص بـ lion king"
+loginFooter.TextColor3 = Color3.fromRGB(255, 170, 0)
+loginFooter.TextSize = 11
+loginFooter.Font = Enum.Font.GothamBold
+loginFooter.Parent = loginFrame
 
-local menu = Instance.new("Frame")
-menu.Size = UDim2.fromOffset(350,205)
-menu.Position = UDim2.new(0.5,-175,0.5,-102)
-menu.BackgroundColor3 = Color3.fromRGB(25,25,40)
-menu.Visible = false
-menu.Parent = gui
-Instance.new("UICorner",menu).CornerRadius = UDim.new(0,16)
 
-local menuStroke = Instance.new("UIStroke",menu)
-menuStroke.Thickness = 3
+-- ==================== الواجهة الرئيسية للسابثون ====================
+local mainFrame = Instance.new("Frame")
+mainFrame.Size = UDim2.new(0, 320, 0, 420)
+mainFrame.Position = UDim2.new(0.5, -160, 0.18, 0)
+mainFrame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+mainFrame.BorderSizePixel = 0
+mainFrame.Visible = false
+mainFrame.Active = true
+mainFrame.Draggable = true
+mainFrame.Parent = screenGui
 
-local menuTitle = Instance.new("TextLabel")
-menuTitle.Size = UDim2.new(1,0,0,40)
-menuTitle.BackgroundTransparency = 1
-menuTitle.Text = "🌈 ADD SUBATHON TIME"
-menuTitle.TextColor3 = Color3.new(1,1,1)
-menuTitle.TextScaled = true
-menuTitle.Parent = menu
+Instance.new("UICorner", mainFrame).CornerRadius = UDim.new(0, 14)
+local mainStroke = Instance.new("UIStroke", mainFrame)
+mainStroke.Color = Color3.fromRGB(0, 255, 204)
+mainStroke.Thickness = 2.5
 
-local function addButton(text,amount,x,y)
-    local b = makeButton(menu,text,x,y,155,43)
-    b.Activated:Connect(function()
-        seconds = seconds + amount
-        update()
-    end)
-end
+local uiGradient = Instance.new("UIGradient", mainFrame)
+uiGradient.Color = ColorSequence.new({
+    ColorSequenceKeypoint.new(0, Color3.fromRGB(0, 120, 255)),
+    ColorSequenceKeypoint.new(0.5, Color3.fromRGB(0, 220, 180)),
+    ColorSequenceKeypoint.new(1, Color3.fromRGB(20, 40, 90))
+})
 
-addButton("+10 Seconds",10,12,48)
-addButton("+1 Minute",60,182,48)
-addButton("+5 Minutes",300,12,100)
-addButton("+1 Hour",3600,182,100)
-addButton("+10 Hours",36000,12,152)
-
-local menuClose = makeButton(menu,"CLOSE",182,152,155,43)
-menuClose.Activated:Connect(function()
-    menu.Visible = false
-end)
-
-start.Activated:Connect(function()
-    local mins = tonumber(input.Text)
-    if mins and mins > 0 then
-        seconds = math.floor(mins*60)
-        running = true
-        update()
-    end
-end)
-
-pause.Activated:Connect(function()
-    running = false
-end)
-
-reset.Activated:Connect(function()
-    running = false
-    seconds = 0
-    update()
-end)
-
-menuButton.Activated:Connect(function()
-    menu.Visible = not menu.Visible
-end)
-
-local hue = 0
-local connection = RunService.Heartbeat:Connect(function(dt)
-    if not alive then return end
-
-    hue = (hue + dt*0.2)%1
-    local color = Color3.fromHSV(hue,1,1)
-    stroke.Color = color
-    menuStroke.Color = color
-
-    if running then
-        seconds = math.max(0,seconds-dt)
-        if seconds <= 0 then running = false end
-        update()
-    end
-end)
-
-close.Activated:Connect(function()
-    alive = false
-    connection:Disconnect()
-    gui:Destroy()
-end)
-
--- Drag main window with touch
-local dragging = false
-local dragStart, startPos
-
-title.InputBegan:Connect(function(inputObject)
-    if inputObject.UserInputType == Enum.UserInputType.Touch
-    or inputObject.UserInputType == Enum.UserInputType.MouseButton1 then
-        dragging = true
-        dragStart = inputObject.Position
-        startPos = frame.Position
-    end
-end)
-
-UIS.InputChanged:Connect(function(inputObject)
-    if dragging and (
-        inputObject.UserInputType == Enum.UserInputType.Touch
-        or inputObject.UserInputType == Enum.UserInputType.MouseMovement
-    ) then
-        local delta = inputObject.Position-dragStart
-        frame.Position = UDim2.new(
-            startPos.X.Scale,startPos.X.Offset+delta.X,
-            startPos.Y.Scale,startPos.Y.Offset+delta.Y
-        )
-    end
-end)
-
-UIS.InputEnded:Connect(function(inputObject)
-    if inputObject.UserInputType == Enum.UserInputType.Touch
-    or inputObject.UserInputType == Enum.UserInputType.MouseButton1 then
-        dragging = false
-    end
-end)
-
-update()
-
-            running = false
-            status.Text = "● SUBATHON FINISHED!"
+task.spawn(function()
+    while true do
+        for i = 0, 360, 5 do
+            uiGradient.Rotation = i
+            task.wait(0.03)
         end
-        update()
     end
 end)
 
--- Drag window
-local dragging = false
-local dragStart
-local startPos
+local settingsBtn = Instance.new("TextButton")
+settingsBtn.Size = UDim2.new(0, 30, 0, 30)
+settingsBtn.Position = UDim2.new(0, 10, 0, 8)
+settingsBtn.BackgroundColor3 = Color3.fromRGB(30, 35, 50)
+settingsBtn.Text = "⚙️"
+settingsBtn.TextSize = 15
+settingsBtn.Parent = mainFrame
+Instance.new("UICorner", settingsBtn).CornerRadius = UDim.new(0, 6)
 
-title.InputBegan:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.Touch
-    or input.UserInputType == Enum.UserInputType.MouseButton1 then
-        dragging = true
-        dragStart = input.Position
-        startPos = main.Position
-    end
-end)
 
-UIS.InputChanged:Connect(function(input)
-    if dragging and (
-        input.UserInputType == Enum.UserInputType.Touch
-        or input.UserInputType == Enum.UserInputType.MouseMovement
-    ) then
-        local delta = input.Position - dragStart
-        main.Position = UDim2.new(
-            startPos.X.Scale,
-            startPos.X.Offset + delta.X,
-            startPos.Y.Scale,
-            startPos.Y.Offset + delta.Y
-        )
-    end
-end)
+-- ==================== نافذة الإعدادات (على اليمين) ====================
+local settingsPanel = Instance.new("Frame")
+settingsPanel.Size = UDim2.new(0, 220, 0, 240)
+settingsPanel.Position = UDim2.new(1, 10, 0, 0)
+settingsPanel.BackgroundColor3 = Color3.fromRGB(18, 20, 30)
+settingsPanel.Visible = false
+settingsPanel.Active = true
+settingsPanel.Draggable = true
+settingsPanel.Parent = mainFrame
 
-UIS.InputEnded:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.Touch
-    or input.UserInputType == Enum.UserInputType.MouseButton1 then
-        dragging = false
-    end
-end)
+Instance.new("UICorner", settingsPanel).CornerRadius = UDim.new(0, 12)
+local sStroke = Instance.new("UIStroke", settingsPanel)
+sStroke.Color = Color3.fromRGB(255, 170, 0)
+sStroke.Thickness = 2
 
-close.Activated:Connect(function()
-    alive = false
-    connection:Disconnect()
-    gui:Destroy()
-end)
+local sTitle = Instance.new("TextLabel", settingsPanel)
+sTitle.Size = UDim2.new(1, 0, 0, 35)
+sTitle.Text = "⚙️ لوحة الإعدادات"
+sTitle.TextColor3 = Color3.fromRGB(255, 170, 0)
+sTitle.TextSize, sTitle.Font, sTitle.BackgroundTransparency = 13, Enum.Font.GothamBold, 1
 
-update()
+local bgThemeBtn = Instance.new("TextButton", settingsPanel)
+bgThemeBtn.Size = UDim2.new(0.9, 0, 0, 40)
+bgThemeBtn.Position = UDim2.new(0.05, 0, 0.20, 0)
+bgThemeBtn.BackgroundColor3 = Color3.fromRGB(0, 120, 255)
+bgThemeBtn.Text = "تغيير الخلفية 🌌"
+bgThemeBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+bgThemeBtn.TextSize, bgThemeBtn.Font = 12, Enum.Font.GothamBold
+Instance.new("UICorner", bgThemeBtn).CornerRadius = UDim.new(0, 6)
+
+local enlargeBtn = Instance.new("TextButton", settingsPanel)
+enlargeBtn.Size = UDim2.new(0.42, 0, 0, 38)
+enlargeBtn.Position = UDim2.new(0.05, 0, 0.45, 0)
+enlargeBtn.BackgroundColor3 = Color3.fromRGB(0, 180, 100)
+enlargeBtn.Text = "تكبير ➕"
+enlargeBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+enlargeBtn.TextSize, enlargeBtn.Font = 11, Enum.Font.GothamBold
+Instance.new("UICorner", enlargeBtn).CornerRadius = UDim.new(0, 6)
+
+local shrinkBtn = Instance.new("TextButton", settingsPanel)
+shrinkBtn.Size = UDim2.new(0.42, 0, 0, 38)
+shrinkBtn.Position = UDim2.new(0.53, 0, 0.45, 0)
+shrinkBtn.BackgroundColor3 = Color3.fromRGB(220, 60, 60)
+shrinkBtn.Text = "تصغير ➖"
+shrinkBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+shrinkBtn.TextSize, shrinkBtn.Font = 1
