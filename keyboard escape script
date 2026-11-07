@@ -1,0 +1,69 @@
+-- DELTA X | FAKE HACK PANEL
+-- VISUAL DEMO ONLY
+
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+
+local gui = Instance.new("ScreenGui")
+gui.Name = "DeltaFakePanel"
+gui.ResetOnSpawn = false
+gui.Parent = game:GetService("CoreGui")
+
+local frame = Instance.new("Frame")
+frame.Size = UDim2.new(0, 300, 0, 390)
+frame.Position = UDim2.new(0.5, -150, 0.5, -195)
+frame.BackgroundColor3 = Color3.fromRGB(13, 9, 22)
+frame.BorderSizePixel = 0
+frame.Parent = gui
+
+local corner = Instance.new("UICorner")
+corner.CornerRadius = UDim.new(0, 14)
+corner.Parent = frame
+
+local title = Instance.new("TextLabel")
+title.Size = UDim2.new(1, 0, 0, 48)
+title.BackgroundColor3 = Color3.fromRGB(90, 35, 160)
+title.Text = "⚡ DELTA X FAKE HACK"
+title.TextColor3 = Color3.new(1,1,1)
+title.TextSize = 19
+title.Font = Enum.Font.GothamBold
+title.Parent = frame
+
+local commands = {
+    "FLY", "SPEED", "INVISIBLE",
+    "NOCLIP", "BAN", "KICK",
+    "TELEPORT", "INFINITE JUMP",
+    "KILL ALL", "REJOIN"
+}
+
+local log = Instance.new("TextLabel")
+log.Size = UDim2.new(1, -20, 0, 35)
+log.Position = UDim2.new(0, 10, 1, -40)
+log.BackgroundTransparency = 1
+log.Text = "READY - DEMO MODE"
+log.TextColor3 = Color3.fromRGB(150,255,170)
+log.TextSize = 11
+log.Parent = frame
+
+for i, command in ipairs(commands) do
+    local button = Instance.new("TextButton")
+    button.Size = UDim2.new(0, 130, 0, 43)
+    button.Position = UDim2.new(
+        0, 12 + ((i-1)%2)*140,
+        0, 60 + math.floor((i-1)/2)*53
+    )
+    button.BackgroundColor3 = Color3.fromRGB(42, 24, 65)
+    button.Text = command
+    button.TextColor3 = Color3.new(1,1,1)
+    button.TextSize = 13
+    button.Font = Enum.Font.GothamBold
+    button.Parent = frame
+
+    local c = Instance.new("UICorner")
+    c.CornerRadius = UDim.new(0, 8)
+    c.Parent = button
+
+    button.MouseButton1Click:Connect(function()
+        log.Text = "[DEMO] " .. command .. " activated!"
+    end)
+end
