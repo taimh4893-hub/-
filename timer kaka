@@ -1,0 +1,278 @@
+
+--================================
+-- KAKA TIMER ULTIMATE
+--================================
+
+local CoreGui = game:GetService("CoreGui")
+local UIS = game:GetService("UserInputService")
+local RunService = game:GetService("RunService")
+
+pcall(function()
+    local old = CoreGui:FindFirstChild("KAKA_TIMER")
+    if old then old:Destroy() end
+end)
+
+local gui = Instance.new("ScreenGui")
+gui.Name = "KAKA_TIMER"
+gui.ResetOnSpawn = false
+gui.Parent = (gethui and gethui()) or CoreGui
+
+local color = Color3.fromRGB(145,75,255)
+local seconds = 300
+local running = false
+local rainbow = false
+local minimized = false
+local scaleValue = 1
+local alive = true
+
+local main = Instance.new("Frame",gui)
+main.Size = UDim2.fromOffset(320,390)
+main.Position = UDim2.new(.5,-160,.5,-195)
+main.BackgroundColor3 = Color3.fromRGB(20,20,32)
+main.BorderSizePixel = 0
+Instance.new("UICorner",main).CornerRadius=UDim.new(0,15)
+
+local stroke=Instance.new("UIStroke",main)
+stroke.Color=color
+stroke.Thickness=2
+
+local scaler=Instance.new("UIScale",main)
+
+local function makeButton(text,x,y,w,callback)
+    local b=Instance.new("TextButton",main)
+    b.Size=UDim2.fromOffset(w,36)
+    b.Position=UDim2.fromOffset(x,y)
+    b.BackgroundColor3=color
+    b.Text=text
+    b.TextColor3=Color3.new(1,1,1)
+    b.TextSize=13
+    b.Font=Enum.Font.GothamBold
+    b.BorderSizePixel=0
+    Instance.new("UICorner",b).CornerRadius=UDim.new(0,8)
+    b.MouseButton1Click:Connect(callback)
+    return b
+end
+
+-- HEADER
+local header=Instance.new("Frame",main)
+header.Size=UDim2.new(1,0,0,45)
+header.BackgroundColor3=Color3.fromRGB(38,28,55)
+header.BorderSizePixel=0
+Instance.new("UICorner",header).CornerRadius=UDim.new(0,12)
+
+local title=Instance.new("TextLabel",header)
+title.Size=UDim2.new(1,-85,1,0)
+title.Position=UDim2.fromOffset(10,0)
+title.BackgroundTransparency=1
+title.Text="⚡ KAKA TIMER ULTIMATE"
+title.TextColor3=Color3.new(1,1,1)
+title.TextSize=15
+title.Font=Enum.Font.GothamBold
+
+local function headerBtn(txt,x,callback)
+    local b=Instance.new("TextButton",header)
+    b.Size=UDim2.fromOffset(28,28)
+    b.Position=UDim2.new(1,x,0,8)
+    b.BackgroundColor3=color
+    b.Text=txt
+    b.TextColor3=Color3.new(1,1,1)
+    b.Font=Enum.Font.GothamBold
+    b.TextSize=16
+    Instance.new("UICorner",b).CornerRadius=UDim.new(0,7)
+    b.MouseButton1Click:Connect(callback)
+end
+
+-- DISPLAY
+local display=Instance.new("TextLabel",main)
+display.Size=UDim2.fromOffset(280,85)
+display.Position=UDim2.fromOffset(20,55)
+display.BackgroundColor3=Color3.fromRGB(12,12,23)
+display.Text="05:00"
+display.TextColor3=Color3.fromRGB(100,255,220)
+display.TextSize=44
+display.Font=Enum.Font.GothamBold
+Instance.new("UICorner",display).CornerRadius=UDim.new(0,10)
+
+local status=Instance.new("TextLabel",main)
+status.Size=UDim2.new(1,0,0,25)
+status.Position=UDim2.fromOffset(0,143)
+status.BackgroundTransparency=1
+status.Text="● READY"
+status.TextColor3=Color3.fromRGB(100,255,150)
+status.Font=Enum.Font.GothamBold
+status.TextSize=13
+
+local function update()
+    display.Text=string.format("%02d:%02d",
+        math.floor(seconds/60),seconds%60)
+end
+
+-- TIMER CONTROLS
+makeButton("▶ START",15,180,140,function()
+    if seconds>0 then
+        running=true
+        status.Text="● RUNNING"
+    end
+end)
+
+makeButton("Ⅱ PAUSE",165,180,140,function()
+    running=false
+    status.Text="● PAUSED"
+end)
+
+makeButton("↻ RESET",15,222,140,function()
+    running=false
+    seconds=300
+    status.Text="● READY"
+    update()
+end)
+
+makeButton("+60 SEC",165,222,140,function()
+    seconds=seconds+60
+    update()
+end)
+
+makeButton("-60 SEC",15,264,140,function()
+    seconds=math.max(0,seconds-60)
+    update()
+end)
+
+makeButton("RAINBOW 🌈",165,264,140,function()
+    rainbow=not rainbow
+end)
+
+-- COLORS
+makeButton("PURPLE",15,306,85,function()
+    color=Color3.fromRGB(145,75,255)
+    stroke.Color=color
+end)
+
+makeButton("BLUE",112,306,85,function()
+    color=Color3.fromRGB(40,130,255)
+    stroke.Color=color
+end)
+
+makeButton("RED",209,306,96,function()
+    color=Color3.fromRGB(255,55,75)
+    stroke.Color=color
+end)
+
+-- SIZE
+makeButton("SMALL",15,350,85,function()
+    scaleValue=math.max(.6,scaleValue-.1)
+    scaler.Scale=scaleValue
+end)
+
+makeButton("BIG",112,350,85,function()
+    scaleValue=math.min(1.5,scaleValue+.1)
+    scaler.Scale=scaleValue
+end)
+
+makeButton("CLOSE",209,350,96,function()
+    alive=false
+    gui:Destroy()
+end)
+
+-- MINIMIZE
+headerBtn("-", -35,function()
+    minimized=not minimized
+    for _,v in ipairs(main:GetChildren()) do
+        if v~=header and v~=stroke and v~=scaler then
+            if v:IsA("GuiObject") then
+                v.Visible=not minimized
+            end
+        end
+    end
+    main.Size=minimized and UDim2.fromOffset(320,45)
+        or UDim2.fromOffset(320,390)
+end)
+
+headerBtn("X",-68,function()
+    alive=false
+    gui:Destroy()
+end)
+
+-- DRAG WINDOW
+local dragging=false
+local dragStart
+local startPos
+
+header.InputBegan:Connect(function(input)
+    if input.UserInputType==Enum.UserInputType.MouseButton1
+    or input.UserInputType==Enum.UserInputType.Touch then
+        dragging=true
+        dragStart=input.Position
+        startPos=main.Position
+    end
+end)
+
+UIS.InputChanged:Connect(function(input)
+    if dragging and
+    (input.UserInputType==Enum.UserInputType.MouseMovement
+    or input.UserInputType==Enum.UserInputType.Touch) then
+        local delta=input.Position-dragStart
+        main.Position=UDim2.new(
+            startPos.X.Scale,startPos.X.Offset+delta.X,
+            startPos.Y.Scale,startPos.Y.Offset+delta.Y
+        )
+    end
+end)
+
+UIS.InputEnded:Connect(function(input)
+    if input.UserInputType==Enum.UserInputType.MouseButton1
+    or input.UserInputType==Enum.UserInputType.Touch then
+        dragging=false
+    end
+end)
+
+-- TIMER ENGINE
+task.spawn(function()
+    while alive do
+        task.wait(1)
+        if running and seconds>0 then
+            seconds=seconds-1
+            update()
+            if seconds<=0 then
+                running=false
+                status.Text="● FINISHED!"
+                status.TextColor3=Color3.fromRGB(255,80,80)
+                pcall(function()
+                    game:GetService("StarterGui"):SetCore(
+                        "SendNotification",{
+                            Title="KAKA TIMER",
+                            Text="Time is up!",
+                            Duration=5
+                        }
+                    )
+                end)
+            end
+        end
+    end
+end)
+
+-- RAINBOW ENGINE
+task.spawn(function()
+    local hue=0
+    while alive do
+        task.wait(.04)
+        if rainbow then
+            hue=(hue+.005)%1
+            local c=Color3.fromHSV(hue,1,1)
+            stroke.Color=c
+            for _,v in ipairs(main:GetChildren()) do
+                if v:IsA("TextButton") then
+                    v.BackgroundColor3=c
+                end
+            end
+        else
+            for _,v in ipairs(main:GetChildren()) do
+                if v:IsA("TextButton") then
+                    v.BackgroundColor3=color
+                end
+            end
+        end
+    end
+end)
+
+print("KAKA TIMER ULTIMATE LOADED!")
+
